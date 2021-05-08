@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="app.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <style>
+
+    </style>
+</head>
+<body>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    【仮想DOM】
+    <div id="app">
+        {{ items }}
+
+        // <br>
+        <section class="tab">
+            <ul class="tab__label">
+
+
+                <!-- 配列(value, index)   for in -->
+                <!-- v-bind:key=""にはIDを指定する ※keyの記述は必須！必ずidなど一意の値をkeyとして設定すること！ -->
+                <li v-for="(item, index) in items" v-bind:key="item.id">
+
+                    <br><br> itemは: {{ item }} <br>
+                    <br><br> indexは: {{ index }} <br>
+                    <br><br> item.idは: {{ item.id }} <br>
+                    <br><br> item.titleは: {{ item.title }} <br><br>
+
+                    <!-- タブをクリックすると、ページ最上部に飛ぶため、.prevent で防ぐ -->
+                    <a href="#" v-on:click.prevent="activate(item.id)"
+                    v-bind:class="{active: active === item.id}">{{ item.title }}</a>
+                    <!-- v-bind:class="{付与したいクラス名: 付与したいクラスをつけるための条件を記述} -->
+                </li>
+
+            </ul>
+
+
+            <div class="tab__content" v-show="active === 1">
+                サイトの情報。サイトの情報。
+            </div>
+
+            <div class="tab__content" v-show="active === 2">
+                商品情報。商品情報。
+            </div>
+
+            <div class="tab__content" v-show="active === 3">
+                お問い合わせ。お問い合わせ。
+            </div>
+
+
+        </section><br><br>
+
+    </div>
+
+
+
+    <script>
+
+        let app = new Vue({
+            el: '#app',
+
+
+            data() {
+                return {
+                    active: 1,
+
+                    items: [
+                        {
+                            id: 1,
+                            title: 'サイトの情報'
+                        },
+                        {
+                            id: 2,
+                            title: '商品情報'
+                        },
+                        {
+                            id: 3,
+                            title: 'お問い合わせ'
+                        },
+                    ]
+
+                }
+            },
+
+
+            methods: {
+                activate(id) {
+                    this.active = id;
+                }
+            }
+
+
+
+        });
+
+
+
+    </script>
+
+
+</body>
+</html>

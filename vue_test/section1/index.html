@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- バージョンを固定して読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <!-- 最新バージョン -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+
+
+</head>
+<body>
+
+    <!-- リアルDOM -->
+    <!-- <a id="google_link">グーグルへのリンク</a> -->
+
+
+
+    <!-- id appが仮想DOMの範囲 -->
+    <div id="app">
+        <!-- 仮想DOMのデータを表示するにはマスタッシュ構文で記述 -->
+        {{ message }} <br><br>
+
+        <!-- タグの中では、マスタッシュ構文で記述できない！ 以下、はエラーとなる  -->
+        <!-- <a href="{{ google }}">グーグルへのリンク(タグの属性の中ではマスタッシュ構文を記述できない！)</a> <br><br> -->
+
+        <!-- リンクは以下の書き方が正解  href属性に紐付ける  ※id、classの指定がないため、id、classの変更あっても問題がない -->
+        <a v-bind:href="google">グーグルへのリンク(v-bind)</a><br><br>
+
+        <!-- valueのなかのオブジェクトはドットで記述できる -->
+        <a v-bind:href="book.url">{{ book.title }}</a><br><br>
+
+        <!-- v-bindで複数の属性を指定する   マスタッシュの中に属性を1つづつ指定する方法 -->
+        <input v-bind="{name: formInput.name, placeholder: formInput.placeholder}"><br><br>
+
+        <!-- v-bindで複数の属性を指定する   keyを記述し属性をまるごと指定する方法（オブジェクトのみ記述する） -->
+        <input v-bind="formInput">
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+    <script>
+        let app = new Vue({
+            el: '#app', // 仮想DOMにする範囲
+
+            // 後々こちらの書き方が必要になってくるためこちらを推奨
+            // 仮想DOMの中でデータとして利用できる
+            // dataは初期設定と思えばOK
+            data() {
+                return {
+                    message: 'hello vue!',  // key: value
+                    google: 'https://google.com',
+                    book: {
+                        title: 'ほんのタイトル',
+                        url: 'https://google.com'
+                    },
+                    formInput: {
+                        name: 'your_name',
+                        placeholder: 'お名前を入力してください'
+                    }
+
+
+
+
+                }
+            }
+        })
+
+        const html = document.querySelector('html');
+
+        // dirを使用することで、ノード一覧を表示することができる
+        // console.dir(html);
+
+        // vueの仮想DOM    $dataとあるのがユーザーが設定した値
+        // console.dir(app);
+
+
+
+
+        // 直接DOM操作
+        // idが変わればコード変更必要
+        // const googleLink = document.getElementById('google_link');
+        // googleLink.href = 'https://google.com';
+
+    </script>
+
+
+
+
+</body>
+</html>

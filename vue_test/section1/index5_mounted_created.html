@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <style>
+
+    </style>
+</head>
+<body>
+
+
+    【仮想DOM】
+    <div id="app">
+
+        // <br>
+        <br><br>
+
+
+        // <br>
+        <br><br>
+
+
+        // <br>
+        <br><br>
+
+    </div>
+
+
+
+
+
+    <script>
+        let app = new Vue({
+            el: '#app',
+
+            data() {
+                return {
+                    test: 'あああ'
+                }
+            },
+            methods: {
+                //
+            },
+            computed: {
+                //
+            },
+            watch: {
+                //
+            },
+
+
+            created() {
+                console.log('created'); // console  → created
+                console.log(this.$el);  // console  → undefined      ※created の段階だとまだDOM要素は生成されていない！
+                console.log(this.test);  // console  → あああ         ※ elの値は取得できていないが、dataの中身は取得できている！
+            },
+
+            mounted() {
+                console.log('mounted');  // console  → mounted
+                console.log(this.$el);   // console  → <div id="app">...</div>
+            },
+
+
+        });
+
+
+    </script>
+
+
+</body>
+</html>

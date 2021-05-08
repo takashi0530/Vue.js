@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>My Vue APP</title>
+    <link rel="stylesheet" href="css/styles.css">
+
+</head>
+<body>
+
+    <div id="app" class="container">
+
+        <ul>
+            <!-- <li>{{ todos[0].title }}</li>
+            <li>{{ todos[1].title }}</li>
+            <li>{{ todos[2].title }}</li> -->
+        </ul>
+
+        {{ todos }}
+        <h1>
+            <button v-on:click="purge">一括削除</button>
+            my todos
+            <span class="info">( {{ remaining.length }} / {{ todos.length }} )</span>
+        </h1>
+        <!-- <ul>
+            <li v-for="(todo, index) in todos">
+
+                <input type="checkbox" v-model="todo.isDone">
+
+                <?=// todoオブジェクトのプロパティ名isDoneがtrueの場合、class="done" を付与する。falseの場合、class="done"は付与されない ?>
+                <span v-bind:class="{done: todo.isDone}">{{ todo.title }}</span>
+
+                {{ index }}
+                {{ todo.isDone }}
+                <span v-on:click="deleteItem(index)" class="command"> [X] </span>
+            </li>
+
+            <li v-show="!todos.length">todoはありません。</li>
+        </ul> -->
+
+
+
+        <ul v-if="todos.length">
+            <li v-if="todos.length" v-for="(todo, index) in todos">
+
+                <input type="checkbox" v-model="todo.isDone">
+
+                <!-- todoオブジェクトのプロパティ名isDoneがtrueの場合、class="done" を付与する。falseの場合、class="done"は付与されない -->
+                <span v-bind:class="{done: todo.isDone}">{{ todo.title }}</span>
+
+                {{ index }}
+                {{ todo.isDone }}
+                <span v-on:click="deleteItem(index)" class="command"> [X] </span>
+            </li>
+
+        </ul>
+        <ul v-else>
+            <li>todoはありません。</li>
+        </ul>
+
+
+
+        <!-- <form v-on:submit="addItem"> -->
+        <form v-on:submit.prevent="addItem"> <!-- formが送信されたときaddItemメソッドが発動する -->
+            <input type="text" v-model="newItem">
+            <input type="submit" value="Add">
+        </form>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

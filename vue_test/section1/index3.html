@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <style>
+
+    </style>
+</head>
+<body>
+
+
+
+    【リアルDOM】 <br>
+    // 通常のjs <br>
+    <button onClick="btnClickedJs()">① クリックしてね（通常のjsメソッド function ）</button><br><br>
+
+    // クリックイベント <br> btnClickedの()かっこはなくてOK<br>
+    <button id="clickEvent">② クリックしてね addEventLisner </button><br><br><br><br>
+
+    // ajax （通常） <br>
+    <form>
+        <button id="prevent" type="submit">送信</button>
+    </form><br><br><br>
+
+
+    【仮想DOM】
+    <div id="app">
+
+        // vue<br>
+        <button v-on:click="btnClickedVue">③ クリックしてね（v-on:click）</button><br><br>
+
+        // イベント vue<br>
+        <button v-on:click="btnClickedEvent">④ Event クリックしてね（v-on:click）</button><br><br>
+
+
+        // イベント vue 引数を渡す<br>
+        <button v-on:click="btnClickedArgs(1)">⑤ 引数 クリックしてね（v-on:click）</button><br><br>
+
+
+        // イベント <br> vue （引数とイベントオブジェクトを同時に渡す インラインステートメント  ※イベントを渡す場合は$マークを忘れずに）<br>
+        <button v-on:click="btnClickedArgsEvent(1, $event)">⑥ 引数Event クリックしてね（v-on:click）</button><br><br><br><br>
+
+
+
+        // ajax （vue） <br>
+        ※ e.stopPropagation();  と  e.preventDefault();  を.stop.prevent と記述することで呼び出せる（バブリングと読み込みの禁止を実行できる）
+        <form>
+            <button v-on:click.stop.prevent="stopPropagationAndPreventDefault" type="submit">送信</button>
+        </form><br><br><br>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        let app = new Vue({
+            el: '#app',
+            data() {
+                return {
+
+                }
+            },
+
+            methods: {
+
+                // vueのjsメソッド
+                btnClickedVue() {
+                    console.log('③ vue がクリックされた')
+                },
+
+                // vueのjsメソッド （イベントあり）
+                btnClickedEvent(e) {
+                    console.log(e);
+                    console.log('④ vue がクリックされた')
+                },
+
+                // vueのjsメソッド （引数あり）
+                btnClickedArgs(int) {
+                    console.log(int);
+                    console.log('⑤ vue がクリックされた')
+                },
+
+                // vueのjsメソッド (引数とイベントを同時に取得)
+                btnClickedArgsEvent(int, e) {
+                    console.log(int, e);
+                    console.log('⑥ vue がクリックされた');
+                },
+
+
+                // ajax(vue)  （バブリングと読み込みの停止を実行しながらメソッドを発動させる）
+                stopPropagationAndPreventDefault(e) {
+                    console.log(e);
+                    console.log('⑦ ajax Vue');
+                }
+            }
+
+        });
+
+
+        // ①通常のjsメソッド
+        function btnClickedJs() {
+            console.log('① jsがクリックされた');
+        }
+
+        // ①通常のjsメソッド  （クリックイベント）
+        const clickEvent = document.getElementById('clickEvent');
+        clickEvent.addEventListener('click', (e) => {
+            // マウスイベントの情報が取得できる
+            console.log(e);
+            console.log('② マウスイベント');
+        })
+
+
+        // ajax (通常)
+        const prevent = document.getElementById('prevent');
+        prevent.addEventListener('click', (e) => {
+            // formの送信を防ぐ(読み込ませない)
+            e.preventDefault();
+            console.log(e);
+        })
+
+
+    </script>
+
+
+</body>
+</html>

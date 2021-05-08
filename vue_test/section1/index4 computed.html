@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <style>
+
+    </style>
+</head>
+<body>
+
+
+
+    【リアルDOM】 <br>
+<!--
+    // <br>
+    <br><br>
+
+
+    // <br>
+    <br><br>
+
+
+    // <br>
+    <br><br>
+
+
+    // <br>
+    <br><br> -->
+
+
+    【仮想DOM】
+    <div id="app">
+
+        // methods の計算<br>
+        ＜結果＞<br>
+        methodsです!!! <br>
+        methodsです!!! <br>
+        {{ totalPriceMethods() }}<br><br>
+        {{ totalPriceMethods() }}<br><br>
+
+
+
+        // computed の計算 <br>
+        ＜結果＞ <br>
+        computedです <br>
+        ※ 何回出力されてもcomputedの場合は、データの値が変更されない限り一回しか処理されない  console.logを確認<br>
+        ※ 一回は必ず実行される <br>
+        ※ 処理の回数を節約できる <br>
+        {{ totalPrice }}<br><br>
+        {{ totalPrice }}<br><br>
+
+
+        // computed の省略記法 一行で書く方法<br>
+        {{ totalPriceOther }}<br><br>
+
+
+        // <br>
+        <br><br>
+
+
+        // <br>
+        <br><br>
+
+
+        // <br>
+        <br><br>
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        let app = new Vue({
+            el: '#app',
+
+            data() {
+                return {
+                    price: '1',
+                    number: '1',
+
+                    // 新しくdataを追加する方法での注意点
+                    // Vue.set(app.reactiveTest, 'message2', 'get/setつきです') とすることでようやく新しく追加したmessage2に対して、getとsetメソッドが追加される
+                    // console.log で app.$data.reactiveTest を参照する
+                    reactiveTest: {
+                        name: 'テスト'
+                    },
+
+                    books: [
+                        {
+                            id: 1,
+                            title: 'タイトル1',
+                            author: '著者名1',
+                            url: 'https://google.com'
+                        },
+                        {
+                            id: 2,
+                            title: 'タイトル2',
+                            author: '著者名2',
+                            url: 'https://google.com'
+                        },
+                        {
+                            id: 3,
+                            title: 'タイトル3',
+                            author: '著者名3',
+                            url: 'https://google.com'
+                        },
+
+
+                    ],
+                }
+            },
+
+
+
+            methods: {
+                totalPriceMethods() {
+                    console.log('methodsです!!!');
+                    return this.number * this.number;
+                }
+            },
+
+
+            // 算出プロパティ   ※ thisで参照しつつ、returnで返す
+            computed: {
+
+                // 3行で記述する方法
+                totalPrice() {
+                    console.log('computedです');
+                    return this.price * this.number;
+                },
+
+                // アロー関数で短く記述する場合は、thisがオブジェクトそのものではなく、windowオブジェクトを返すため、this.number ...とせずに、app.numberとしてあげる（vueインスタンスを指定してあげる）
+                totalPriceOther: app => app.number * app.price
+            },
+
+
+            // 監視プロパティ watch
+            watch: {
+                books: {
+                    handler() {
+                        console.log('変更されました');
+                    },
+
+                    // deepオプションを使用する 深い部分まで監視する
+                    deep: true
+                }
+            },
+
+
+
+        });
+
+
+
+        // 素のjavascriptの this を検証する
+        //   → windowオブジェクトとなる
+        console.log(this);
+
+
+        // オブジェクトのなかでthisを見るパターン
+        //   → そのオブジェクトを参照する
+        const obj = {
+            test: function() {
+                console.log(this); // そのオブジェクト
+            }
+        }
+        console.log(obj);
+
+        // アロー関数のなかでthisを見るパターン
+        //    → windowオブジェクトとなる
+        const objArrow = {
+            test: () => {
+                console.log(this); // windowオブジェクト
+            }
+        }
+        objArrow.test();
+
+
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- フォントオウサム 読み込み -->
+    <script src="https://kit.fontawesome.com/916ceaded9.js" crossorigin="anonymous"></script>
+
+    <!-- css読み込み -->
+    <!-- <link rel="stylesheet" href="app.css"> -->
+
+    <!-- vue.js読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <!-- アニメイト.css 読み込み -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        /* マスタッシュが一瞬表示されるのを防ぐ */
+        [v-cloak] {
+            display: none;
+        }
+        .error {
+            color: red;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <!-- マスタッシュが一瞬表示されるのを防ぐ v-cloak -->
+    <div id="app" v-cloak>
+
+        <!-- errorsに値が入っていれば -->
+        <p v-if="errors.length">
+            <ul>
+                <!-- errorsに入っている複数のエラー文言をループでリスト表示させる -->
+                <li class="error" v-for="error in errors">{{ error }}</li>
+            </ul>
+        </p>
+
+        <!-- フォームがsubmitされたとき、画面読み込みを防ぎながら（prevent）、validateメソッドを実行させる -->
+        <form v-on:submit.prevent="validate">
+
+            氏名
+            <!-- <input type="text" v-model="contact.yourName"> -->
+            <!-- computed で監視している ↓ -->
+            <input type="text" v-model="yourName" ><br>
+            <!--  -->
+            <p v-bind:class="{error: hasError.yourName}">{{ contact.yourName.length }} / 20</p>
+            <!-- hasError がtrue つまり、エラーが存在する場合は、以下文言を表示させる -->
+            <p v-show="hasError.yourName" class="error">氏名は20文字以内で入力してください。</p>
+
+            <br>
+            電話番号
+            <!-- .number : 数字を入力すると文字列ではなくint型で値が渡る  ※.numberがない場合は、数字も文字列型で渡る -->
+            <input type="tel" v-model.number="contact.tel">
+
+            <br>
+            メールアドレス
+            <!-- .trim：空白（スペース）を除去してくれる -->
+            <!-- .lazy : カーソル（フォーカス）がはずれたら、値をバインドする  ※lazyがない場合は、入力途中でもリアルタイムで値をバインドする -->
+            <input type="email" v-model.lazy.trim="contact.email">
+
+            <br>
+            性別
+            <input type="radio" value="male" v-model="contact.gender">男性
+            <input type="radio" value="female" v-model="contact.gender">女性
+            <input type="radio" value="other" v-model="contact.gender">その他
+
+            <br>
+            年齢
+            <select v-model="contact.age">
+                <option disabled value="">年齢を選択してください</option>
+                <option>10代</option>
+                <option>20代</option>
+                <option>30代</option>
+                <option>40代~</option>
+            </select>
+
+            <br>
+            メッセージ
+            <textarea v-model="contact.message"></textarea>
+
+            <br>
+            このサイトを知った理由
+            <input type="checkbox" value="webサイト" v-model="contact.attracts">webサイト
+            <input type="checkbox" value="チラシ" v-model="contact.attracts">チラシ
+            <input type="checkbox" va  lue="その他" v-model="contact.attracts">その他
+
+            <br>
+            注意事項に同意する
+            <input type="checkbox" v-model="contact.caution">
+
+            <br>
+            <input type="submit" value="送信">
+
+        </form>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <script>
+        let app = new Vue({
+            el: '#app',
+
+            data() {
+                return {
+                    contact: {
+                        yourName: '',
+                        tell: '',
+                        gender:'',
+                        age: '',
+                        message: '',
+                        attracts: [],
+                        caution: false,
+                    },
+                    errors: [],
+
+                    hasError: {
+                        // 入力された文字数が21文字以上だったらtrueとなり、エラーとなる （falseならエラーなし、20文字以下）
+                        yourName: false
+                    }
+
+                }
+            },
+
+            methods: {
+                validate() {
+
+                    // エラー文言を初期化する
+                    this.errors = [];
+
+                    // 氏名が未入力の場合
+                    if (!this.contact.yourName) {
+                        this.errors.push('氏名は必須です');
+
+                    }
+
+                    // 氏名が21文字以上の場合
+                    if (this.contact.yourName.length > 20) {
+                        this.errors.push('氏名は20文字以内で入力してください');
+                    }
+
+                    // 性別にチェックが入っていない場合
+                    if (!this.contact.gender) {
+                        this.errors.push('性別を選択してください');
+                    }
+
+                    // 注意事項にチェックが入っていない場合
+                    if (!this.contact.caution) {
+                        // errorsの配列の中に.pushで値であるエラー文言を追加する
+                        this.errors.push('注意事項にチェックをいれてください');
+                    }
+
+                    // エラーが0なら
+                    if (!this.errors.length) {
+                        console.log('送信可能です');
+                    }
+
+                },
+
+            },
+
+            // dataの値を監視
+            computed: {
+                yourName: {
+
+                    get() {
+                        return this.contact.yourName;
+                    },
+
+                    set(value) {
+                        // 常にyourName の値を監視し続ける
+                        console.log(value);
+
+                        // 氏名が20文字以下なら、hasErrorのyourNameはfalse(エラーなし)
+                        if (value.length <= 20) {
+                            this.hasError.yourName = false;
+                        } else {
+                            this.hasError.yourName = true;
+                        }
+
+                        return this.contact.yourName = value;
+                    }
+                }
+            }
+
+        });
+    </script>
+
+
+</body>
+</html>

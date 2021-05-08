@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- フォントオウサム -->
+    <script src="https://kit.fontawesome.com/916ceaded9.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="app.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+
+    <style>
+        .fas.fa-address-card {
+            color: red;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <div id="app">
+        現在のisShow:   {{ isShow }} <br><br>
+
+        <button v-on:click="isShow = !isShow">画像を見る</button>
+
+        <!-- vueのトランジション フェード -->
+        <transition name="fade">
+
+            <div v-show="isShow">
+
+                <!-- モーダルのdiv全部 -->
+                <div class="modal__inner">
+
+                    <!-- バツアイコンの表示・非表示 -->
+                    <div class="modal__close" v-on:click="isShow = !isShow ">
+                        <!-- バツｘ アイコン -->
+                        <i class="fas fa-times"></i>
+                    </div>
+
+                    <!-- 画像 -->
+                    <img src="image1.jpg" alt="">
+
+                </div>
+
+                <!-- モーダルの薄い黒の背景 -->
+                <div class="modal__background" v-on:click="isShow = !isShow"></div>
+
+            </div>
+
+        </transition>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <script>
+        let app = new Vue({
+            el: '#app',
+
+            data() {
+                return {
+                    isShow: false,
+                }
+            }
+        })
+    </script>
+
+
+</body>
+</html>

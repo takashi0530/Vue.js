@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <style>
+        .active {
+            border: 1px solid red;
+        }
+        .text-danger {
+            color: red;
+        }
+
+        /*  vueのコンパイルが終了するまでの処理（マスタッシュを一瞬でも表示させないための処理） */
+        [v-cloak] {
+            display: none;
+        }
+
+    </style>
+
+
+</head>
+<body>
+
+    // リアルDOM
+    <div style="color: blue; font-size: 20px;">styleテスト</div><br>
+    <div class="active text-danger">classテスト</div><br><br>
+
+
+
+    // 仮想DOM
+    <div id="app" v-cloak>
+        <div v-bind:style="{fontSize: fontSize}" class="">styleテスト（仮想DOM）</div>
+        <div v-bind:style="{'font-size': fontSize}" class="">styleテスト（仮想DOM）</div><br><br>
+
+
+        // isActiveがtrueなら class="active" を付与する
+        <div v-bind:class="{ active: isActive }">classテスト（仮想DOM）</div><br><br>
+
+
+        // v-showの使い方  falseの場合 display: none; が付与され、非表示となる<br>
+        <div v-show="isDisplay">表示</div><br><br>
+        // !でfalseのときに表示させることもできる<br>
+        <div v-show="!isDisplay">falseになっています</div><br><br>
+
+
+        // もし isDisplay が true なら表示される。
+        <div v-if="isDisplay">ifで表示</div><br>
+
+        <div v-if="signal === 'red'">赤</div>
+        <div v-else-if="signal === 'blue'">青</div>
+        <div v-else-if="signal === 'yellow'">黄</div>
+        <div v-else>赤青黄ではありません</div><br><br>
+
+
+        // 配列(value)   for in
+        <ul>
+            <li v-for="member in members">
+                {{ member }}
+            </li>
+        </ul><br><br>
+
+
+        // 配列(value, index)   for in
+        <ul>
+            <li v-for="(member, index) in members">
+                {{ index }}  :  {{ member }}
+            </li>
+        </ul><br><br>
+
+
+        // オブジェクト(value)   for in
+        <ul>
+            <li v-for="value in book">
+                {{ value }}
+            </li>
+        </ul><br><br>
+
+
+        // オブジェクト(value, key)   for in
+        <ul>
+            <li v-for="(value, key) in book">
+                {{key}} : {{ value }}
+            </li>
+        </ul><br><br>
+
+
+        // オブジェクト(value, key, index)   for in
+        <ul>
+            <li v-for="(value, key, index) in book">
+                {{index}} : {{key}} : {{ value }}
+            </li>
+        </ul><br><br>
+
+
+        // 複数オブジェクト <br>
+        <!-- {{ books }} <br><br> -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>タイトル</th>
+                    <th>著者</th>
+                    <th>URL</th>
+
+                    <th>indexの値</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- v-bind:key=""にはIDを指定する ※keyの記述は必須！必ずidなど一意の値をkeyとして設定すること！ -->
+                <tr v-for="(book, index) in books" v-bind:key="book.id">
+                    <td>{{ book.id }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.url }}</td>
+
+                    <td>{{ index }}</td>
+                    <td>{{ aaa }}</td>
+                </tr>
+            </tbody>
+        </table><br><br>
+
+
+        // v-text (textContent)
+        <div v-text="test"></div><br>
+
+        // v-html (innerHtml)
+        <div v-html="test"></div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        let app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    // オブジェクトの中ではハイフン-を使用できない  ※javascriptでは基本的にキャメルケースで記載する
+                    // font-size: '20px'
+
+                    fontSize: '20px', // キャメルケースで書く必要がある
+
+                    // Chromeの開発者ツールで app.$data.isActive = true とすると仮想DOMの値を操作、確認できる
+                    isActive: true,
+
+                    // 表示かどうか？
+                    isDisplay: true,
+
+                    // 何色か？
+                    signal: 'red',
+
+                    // 配列   for in
+                    members: [
+                        '本田',
+                        '香川',
+                        '長友'
+                    ],
+
+                    // オブジェクト
+                    book: {
+                        title: 'タイトル',
+                        author: '著者',
+                        url: 'https://google.com'
+                    },
+
+                    // 複数オブジェクト
+                    books: [
+                        {
+                            id: 1,
+                            title: 'タイトル1',
+                            author: '著者名1',
+                            url: 'https://google.com'
+                        },
+                        {
+                            id: 2,
+                            title: 'タイトル2',
+                            author: '著者名2',
+                            url: 'https://google.com'
+                        },
+                        {
+                            id: 3,
+                            title: 'タイトル3',
+                            author: '著者名3',
+                            url: 'https://google.com'
+                        },
+                    ],
+
+                    // v-text  v-html との比較   ※v-htmlはユーザーからのコンテンツに対して使用してはいけない
+                    test: 'あああ<br>いいい'
+
+
+                }
+            }
+        })
+
+
+
+
+
+    </script>
+
+</body>
+</html>

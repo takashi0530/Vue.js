@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- フォントオウサム -->
+    <script src="https://kit.fontawesome.com/916ceaded9.js" crossorigin="anonymous"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+
+    <style>
+        /* リストアイテム vue */
+        /* https://jp.vuejs.org/v2/guide/transitions.html#%E3%83%AA%E3%82%B9%E3%83%88%E3%83%88%E3%83%A9%E3%83%B3%E3%82%B8%E3%82%B7%E3%83%A7%E3%83%B3 */
+        .list-item {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .list-enter-active, .list-leave-active {
+            transition: all 1s;
+        }
+        .list-enter, .list-leave-to /* .list-leave-active for below version 2.1.8 */ {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="app">
+
+    <button v-on:click="add">Add</button>
+    <button v-on:click="remove">Remove</button>
+
+    <!-- リストトランジション -->
+    <!-- listはクラスの頭についている名前 -->
+    <!-- pタグで作成 ※記述しなければ<span>タグがデフォルトとなる -->
+    <transition-group name="list" tag="p">
+
+        <!-- key属性は必須！ -->
+        <span v-for="item in items" v-bind:key="item" class="list-item">
+            {{ item }}
+        </span>
+
+    </transition-group>
+
+</div>
+
+
+
+<script>
+    let app = new Vue({
+        el: '#app',
+        data() {
+            return {
+                items: [1,2,3,4,5,6,7,8,9],
+                nextNum: 10
+            }
+        },
+        methods: {
+            // ランダムな数字
+            randomIndex() {
+                return Math.floor(Math.random() * this.items.length)
+            },
+
+            // 追加
+            add() {
+                this.items.splice(this.randomIndex(), 0, this.nextNum++)
+            },
+
+            // 削除
+            remove() {
+                this.items.splice(this.randomIndex(), 1)
+            },
+        }
+    })
+</script>
+
+
+
+<script>
+    // javascript spliceの使い方
+    let obj = [
+        {id:1, title: 'あああ'},
+        {id:2, title: 'いいい'},
+        {id:3, title: 'ううう'},
+    ];
+
+
+    // 削除と追加（置き換え）
+    obj.splice(2, 1, {id: 4, title: '変更変更！'});
+
+    // 結果
+    console.log(obj);
+    // 0: {id: 1, title: "あああ"}
+    // 1: {id: 2, title: "いいい"}
+    // 2: {id: 4, title: "変更変更！"}
+
+
+
+    // 追加      index 3 の位置 (4番目の要素の前) から 0 個の要素を削除して オブジェクト{id: 5, title: '追加しました！！！'} を挿入する
+    obj.splice(3, 0, {id: 5, title: '追加しました！！！'});
+
+    // 結果
+    console.log(obj);
+    // 0: {id: 1, title: "あああ"}
+    // 1: {id: 2, title: "いいい"}
+    // 2: {id: 4, title: "変更変更！"}
+    // 3: {id: 5, title: "追加しました！！！"}
+
+</script>
+
+
+</body>
+</html>
