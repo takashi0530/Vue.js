@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- フォントオウサム 読み込み -->
+    <script src="https://kit.fontawesome.com/916ceaded9.js" crossorigin="anonymous"></script>
+
+    <!-- css読み込み -->
+    <!-- <link rel="stylesheet" href="app.css"> -->
+
+    <!-- vue.js読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <!-- アニメイト.css 読み込み -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <!-- lodash.js 読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
+
+
+    <style>
+        /* マスタッシュが一瞬表示されるのを防ぐ */
+        [v-cloak] {
+            display: none;
+        }
+
+
+    </style>
+</head>
+<body>
+
+
+
+
+
+    <!-- ▼ 仮想DOMここから -->
+    <!-- マスタッシュが一瞬表示されるのを防ぐ v-cloak -->
+    <div id="app" v-cloak>
+
+        <!-- ページを読み込んだ時点で関数を実行させる場合 -->
+
+
+        <!-- ボタンを押して関数を実行させる場合 -->
+        <button v-on:click="getDogImage">画像を取得</button><br>
+
+        <!-- apiから取得した画像を表示させる -->
+        <img v-bind:src="dogImage"><br>
+
+        <!-- テキストボックス   この値をvueの watch: で常に監視している。値が変更されると処理が発動される -->
+        <input type="text" v-model="watchTest">
+
+    </div>
+    <!-- ▲ 仮想DOMここまで ▲ -->
+
+
+
+
+
+
+    <script>
+
+        // オブジェクトを定義
+        let obj = {
+            a: 'テスト'
+        }
+
+        // objに値を追加する
+        obj.b = 'あああ';
+
+        // 関数自体をオブジェクトのプロパティに追加している  ※この場合は関数testのかっこが不要   ※コンソール内、obj.c で実行すると関数は実行されない。しかしobj.c() とかっこをつけると関数は実行される
+        // 実行するときにはかっこ（）が必要！！
+        obj.c = test;
+
+        //
+        function test() {
+            console.log('テスト');
+        }
+
+
+
+
+        // fetchで通信するurl
+        const url = 'https://dog.ceo/api/breeds/image/random';
+
+        // fetchで渡すオプション値
+        const options = {
+            method: 'get'
+        }
+
+
+
+        let app = new Vue({
+            el: '#app',
+
+            data() {
+                // data内のreturnの末尾にカンマをつけるとエラーになる
+                return {
+                    dogImage: '',
+                    watchTest: ''
+                }
+            },
+
+            methods: {
+                // apiで処理をして、帰ってくるのを待ってから処理を続ける async をつけると非同期関数になる
+                async getDogImage() {
+
+                    //非同期関数の中で await をつけると、関数の処理をまってから処理を続行する
+                    // fetchメソッドはpromisesオブジェクトを返すので、.then でつなげることができる
+                    // responseのままではデータとして扱えないので、response.jsonとすることでオブジェクトとして扱えるようになる
+                    // 取得したオブジェクトを定数に代入
+                    const response = await fetch(url, options)
+                        .then(response => response.json());
+
+                    // 取得で来たjsonデータ
+                    // console.log(response);
+
+                    // 犬の画像のurl
+                    // console.log(response.message);
+
+                    // 犬の画像のurlをプロパティに代入
+                    this.dogImage = response.message;
+                }
+            },
+
+            // 常に監視する
+            watch: {
+                // v-model="watchTest となっている部分のテキストボックスが変更されているかどうか常に監視する。変更された場合は以下を実行
+                watchTest() {
+
+                    // 1秒後にvueインスタンスのプロパティである、getDogImageのメソッドを実行させ、犬の画像をapiで取得する
+                    this.watchDogImage();
+                }
+            },
+
+            // ページを読み込んだ時点でメソッドを実行する
+            created() {
+
+                // 犬の画像をapiで取得するメソッドを実行
+                this.getDogImage();
+
+                // javascriptのもともとの機能を使って、vueインスタンスにプロパティを設定する、その中に関数を設定して、watchで監視させる
+                // ページを読み込んだタイミングで（1秒待ってから、getDogImageを実行する、というメソッドを） watchDogImageプロパティに追加する
+                this.watchDogImage = _.debounce(this.getDogImage, 1000);
+            }
+
+        });
+    </script>
+
+
+</body>
+</html>

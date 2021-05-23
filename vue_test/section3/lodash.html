@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- フォントオウサム 読み込み -->
+    <!-- <script src="https://kit.fontawesome.com/916ceaded9.js" crossorigin="anonymous"></script> -->
+
+    <!-- css読み込み -->
+    <!-- <link rel="stylesheet" href="app.css"> -->
+
+    <!-- vue.js読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <!-- アニメイト.css 読み込み -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/> -->
+
+    <!-- lodash.js 読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
+
+
+    <style>
+        /* マスタッシュが一瞬表示されるのを防ぐ */
+        [v-cloak] {
+            display: none;
+        }
+
+
+    </style>
+</head>
+<body>
+
+
+
+
+
+    <!-- ▼ 仮想DOMここから -->
+    <!-- マスタッシュが一瞬表示されるのを防ぐ v-cloak -->
+    <div id="app" v-cloak>
+
+
+    </div>
+    <!-- ▲ 仮想DOMここまで ▲ -->
+
+
+
+
+
+
+
+
+
+
+    <script>
+
+        // 例えば、以下でブラウザ幅を変更すると絶えず処理が行われるため、lodash.jsを使用して、処理の間隔を開ける
+        // window.addEventListener('resize', () => {
+        //     console.log('通常のリサイズ');
+        // })
+
+
+        // lodash.js を使用したとき 動きをとめてから3秒後に処理を実行する
+        window.addEventListener('resize', _.debounce(() => {
+            console.log('debounceでリサイズ')
+        }, 3000));
+
+        // lodash.js throttleでリサイズ  リサイズされたら一度目の処理はすぐに実行されるが、二回目以降の処理は3秒間隔で実行される
+        window.addEventListener('resize', _.throttle(() => {
+            console.log('throttleでリサイズ')
+        }, 3000));
+
+
+
+        let app = new Vue({
+            el: '#app',
+
+            data() {
+                // data内のreturnの末尾にカンマをつけるとエラーになる
+                return {
+                    //
+                }
+            }
+
+        });
+    </script>
+
+
+</body>
+</html>

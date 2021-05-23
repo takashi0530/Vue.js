@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- vue.js読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <style>
+        /* マスタッシュが一瞬表示されるのを防ぐ */
+        [v-cloak] {
+            display: none;
+        }
+
+        .parent{
+            width: 400px;
+            margin: 0 auto;
+            border: 1px red solid;
+            padding: 50px;
+        }
+        .child {
+            width: 40%;
+            margin: 0 auto;
+            border: 1px blue solid;
+            text-align: center;
+        }
+        .grand_chiLd {
+            width: 20%;
+            margin: 0 auto;
+            border: 1px green solid;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ▼ 仮想DOMここから -->
+    <!-- マスタッシュが一瞬表示されるのを防ぐ v-cloak -->
+    <!-- 親 コンポーネント -->
+    <div id="app" class="parent">
+        親のコンポーネントです
+
+        <!-- 子を表示させる   ※componentは単数形に注意 -->
+        <child-component class="child"></child-component>
+
+    </div>
+    <!-- ▲ 仮想DOMここまで ▲ -->
+
+
+<script>
+
+    // eventBusを使うには、新しくvueインスタンスを作る必要がある
+    let eventBus = new Vue();
+
+
+    // 孫のコンポーネント
+    let grandChildComponent = {
+        template: `
+        <div>
+            孫のコンポーネントです
+            <button v-on:click="testEvent">ボタン</button>
+        </div>`,
+
+        methods: {
+            testEvent() {
+                eventBus.$emit('eventBus-test', '孫のボタンです');
+            }
+        }
+
+        // 孫側でeventBus-testを発生させる
+    };
+
+    // 子のコンポーネント
+    let childComponent = {
+        template: `
+            <div>
+                子のコンポーネントです
+                <grand-child-component class="grand_chiLd">
+                </grand-child-component>
+            </div>`,
+
+            // 子のコンポーネントから、孫のコンポーネントを読み込む必要があるため以下を記述
+            components: {
+                grandChildComponent
+            }
+    };
+
+
+    // 親
+    let app = new Vue({
+        el: '#app',
+        data() {
+            return {
+                //
+            }
+        },
+
+        // 親から子のコンポーネントを読み込む必要があるため以下を記載
+        components: {
+            childComponent
+        },
+
+        // イベントを設定する 孫から親へ
+        mounted() {
+            // 孫の方でもevent
+            eventBus.$on('eventBus-test', test => {
+                // 入ってきた引数をconsoleで表示する
+                console.log('親のmethods内：' + test);
+            });
+        }
+
+    });
+</script>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

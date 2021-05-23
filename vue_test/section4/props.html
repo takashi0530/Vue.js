@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- フォントオウサム 読み込み -->
+    <!-- <script src="https://kit.fontawesome.com/916ceaded9.js" crossorigin="anonymous"></script> -->
+
+    <!-- css読み込み -->
+    <!-- <link rel="stylesheet" href="app.css"> -->
+
+    <!-- vue.js読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <!-- アニメイト.css 読み込み -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/> -->
+
+    <!-- lodash.js 読み込み -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script> -->
+
+
+    <style>
+        /* マスタッシュが一瞬表示されるのを防ぐ */
+        [v-cloak] {
+            display: none;
+        }
+
+        .parent{
+            width: 400px;
+            margin: 0 auto;
+            border: 1px red solid;
+            padding: 50px;
+        }
+        .child {
+            width: 40%;
+            margin: 10px auto;
+            border: 1px blue solid;
+            text-align: center;
+        }
+
+
+    </style>
+</head>
+<body>
+
+
+
+
+
+    <!-- ▼ 仮想DOMここから -->
+
+
+    <!-- 親コンポーネント  <Root> -->
+    <div id="app" class="parent">
+
+
+        <!-- 子 コンポーネント -->        <!-- コンポーネントの中にpropsをかいている（title）。titleという名前で  テストという値を渡している。 -->
+        <my-component title="テスト" class="child"></my-component>
+
+        <!-- 子 コンポーネント -->       <!-- props 変数で設定する方法   v-bind:title="parentTitle"  -->
+        <my-component v-bind:title="parentTitle" class="child"></my-component>
+
+        <!-- 子 コンポーネント -->
+        <my-component disabled class="child"></my-component>
+
+    </div>
+
+
+    <!-- ▲ 仮想DOMここまで ▲ -->
+`
+
+
+
+
+
+
+
+
+
+    <script>
+
+        // 子 コンポーネント
+        // ローカルコンポーネントの定義
+        let myComponent = {
+            template:
+                `<div>
+                    ＜子コンポーネント＞<br>
+                    {{ getTitle }}
+                    <div v-show="isShow">表示</div>
+                </div>`,
+
+            // propsは親から渡ってくる値。直接触ることができない。
+            // →  data(){}の箇所で新しく持ち直す必要がある。そうすることでget getTitle , set setTitleメソッドが生まれ、リアクティブに値を変更することができるようになる
+            // data(){}もしくは、computedに渡してもOK
+            props: {
+                // 仮想DOMで書いた title="テスト" の値をコンポーネント側でもつことができる
+                title: {
+                    // Stringの頭は大文字
+                    type: String
+                },
+                disabled: {
+                    // Booleanの頭は大文字
+                    type: Boolean,
+                    default: false
+                }
+            },
+
+            data() {
+                return {
+                    isShow: false,
+
+                    // propsのtitleをdata()のgetTitleに代入して、data内で値を持たせることができる
+                    getTitle: this.title
+                }
+            }
+        };
+
+
+
+        let app = new Vue({
+            el: '#app',
+
+            // ローカルコンポーネント
+            // componentを利用する  ※複数形で書く！
+            components: {
+                // 以下の様に、オブジェクトのkeyとvalueが同じ名前なら、86行目のように myComponent とひとつ記述するだけでOK！（jsの省略記法） 85行と86行は同じ意味  ※キャメルケースで記述すれば、自動的にhtml側ではケバブケースで変換してくれる
+                // 'my-component': myComponent
+                myComponent
+            },
+
+            data() {
+                // data内のreturnの末尾にカンマをつけるとエラーになる
+                return {
+                    //
+                    parentTitle: '親側のタイトル'
+                }
+            }
+
+        });
+    </script>
+
+
+</body>
+</html>

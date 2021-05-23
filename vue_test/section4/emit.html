@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- フォントオウサム 読み込み -->
+    <!-- <script src="https://kit.fontawesome.com/916ceaded9.js" crossorigin="anonymous"></script> -->
+
+    <!-- css読み込み -->
+    <!-- <link rel="stylesheet" href="app.css"> -->
+
+    <!-- vue.js読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <!-- アニメイト.css 読み込み -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/> -->
+
+    <!-- lodash.js 読み込み -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script> -->
+
+
+    <style>
+        /* マスタッシュが一瞬表示されるのを防ぐ */
+        [v-cloak] {
+            display: none;
+        }
+
+        .parent{
+            width: 400px;
+            margin: 0 auto;
+            border: 1px red solid;
+            padding: 50px;
+        }
+        .child {
+            width: 40%;
+            margin: 0 auto;
+            border: 1px blue solid;
+            text-align: center;
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+
+
+
+
+    <!-- ▼ 仮想DOMここから -->
+    <!-- マスタッシュが一瞬表示されるのを防ぐ v-cloak -->
+    <!-- 親 コンポーネント -->
+    <div id="app" class="parent">
+
+        <!-- 子 コンポーネント    子から親にイベントを発射する-->
+        <!-- v-on:custom-event="親のメソッド名" -->
+        <emit-test
+            v-on:custom-event="parentMethod"
+            class="child"
+        >
+        </emit-test>
+
+
+    </div>
+    <!-- ▲ 仮想DOMここまで ▲ -->
+
+
+
+
+
+
+
+
+
+
+    <script>
+
+        let emitTest = {
+            template: `
+                <div>
+                    <!-- v-on:click="子のメソッド名" -->
+                    <button v-on:click="childMethod">子側のボタン</button>
+                </div>
+            `,
+
+            methods: {
+                // childMethod(子のメソッド名)
+                childMethod() {
+                    // 子から親に通知するために使うメソッド:  this.$emit
+                    // 第2引数に値を設定すると、親メソッドの 引数e で値を受け取ることができる
+                    this.$emit('custom-event', '子の値');
+                    // console.log('あらーと');
+                }
+            }
+
+        };
+
+
+
+        let app = new Vue({
+            el: '#app',
+
+            // ローカルコンポーネント
+            // componentを利用する  ※複数形で書く！
+            // 子のコンポーネント名は arrayTest とする
+            components: {
+                // emitTest
+                'emit-test': emitTest
+            },
+
+            data() {
+                // data内のreturnの末尾にカンマをつけるとエラーになる
+                return {
+                    //
+                }
+            },
+
+            methods: {
+                // 親のメソッド名（ parentMethod(e) ）
+                parentMethod(e) {
+                    console.log(e);
+                    console.log('ああああ')
+                }
+            }
+
+        });
+    </script>
+
+
+</body>
+</html>

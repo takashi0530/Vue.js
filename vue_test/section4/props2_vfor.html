@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- フォントオウサム 読み込み -->
+    <!-- <script src="https://kit.fontawesome.com/916ceaded9.js" crossorigin="anonymous"></script> -->
+
+    <!-- css読み込み -->
+    <!-- <link rel="stylesheet" href="app.css"> -->
+
+    <!-- vue.js読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <!-- アニメイト.css 読み込み -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/> -->
+
+    <!-- lodash.js 読み込み -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script> -->
+
+
+    <style>
+        /* マスタッシュが一瞬表示されるのを防ぐ */
+        [v-cloak] {
+            display: none;
+        }
+
+        .parent{
+            width: 400px;
+            margin: 0 auto;
+            border: 1px red solid;
+            padding: 50px;
+        }
+        .child {
+            width: 40%;
+            margin: 0 auto;
+            border: 1px blue solid;
+            text-align: center;
+        }
+
+
+    </style>
+</head>
+<body>
+
+
+
+
+
+    <!-- ▼ 仮想DOMここから -->
+    <!-- マスタッシュが一瞬表示されるのを防ぐ v-cloak -->
+    <!-- 親 コンポーネント -->
+    <div id="app" class="parent">
+
+        <!-- 子 コンポーネント -->
+        <!-- コンポーネントでv-forを回すには必ずkeyが必要（今回はkeyであるnameがユニークな情報であればOK）   v-bind:key="member.name"    -->
+        <!-- コンポーネントの通り道ということで、  propsと紐付ける必要がある  v-bind:item="member"  -->
+        <array-test
+            v-for="member in members"
+            v-bind:key="member.name"
+            v-bind:item="member"
+            class="child"
+        ></array-test>
+
+    </div>
+    <!-- ▲ 仮想DOMここまで ▲ -->
+`
+
+
+
+
+
+
+
+
+
+    <script>
+
+        let arrayTest = {
+            props: {
+                item: {
+                    type: Object
+                }
+            },
+            template:
+                `<div>
+                    <!-- propsのオブジェクト名   itemはpropsで設定しているitemのこと -->
+                    <p>{{ item.name }}</p>
+                </div>`
+        };
+
+
+
+
+        let app = new Vue({
+            el: '#app',
+
+            // ローカルコンポーネント
+            // componentを利用する  ※複数形で書く！
+            // 子のコンポーネント名は arrayTest とする
+            components: {
+                arrayTest
+            },
+
+            data() {
+                // data内のreturnの末尾にカンマをつけるとエラーになる
+                return {
+                    // 親側で配列を作成 配列のなかにオブジェクト
+                    members: [
+                        {name: '久保'},
+                        {name: '南野'},
+                        {name: '堂安'}
+                    ]
+                }
+            }
+
+        });
+    </script>
+
+
+</body>
+</html>

@@ -41,7 +41,7 @@
               <v-card>
                 <v-img
                 :src="dogImage">
-                </v-img> 
+                </v-img>
               </v-card>
             </v-col>
           </v-row>
@@ -73,7 +73,7 @@
       methods:{
         async fetchDogImage(index){
           const that = this
-          this.dogUrl = `https://dog.ceo/api/breed/${this.dogTypes[index]}/images` 
+          this.dogUrl = `https://dog.ceo/api/breed/${this.dogTypes[index]}/images`
           const response = await fetch(this.dogUrl, {method:'get'})
           .then( response => {
             if(response.ok){

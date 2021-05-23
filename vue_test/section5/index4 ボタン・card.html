@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- グーグルフォント css読み込み-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+
+    <!-- マテリアルデザインアイコン mdi 5.5.55 css読み込み -->
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.5.55/css/materialdesignicons.min.css" rel="stylesheet">
+
+    <!-- vuetify バージョン2.3.10 css読み込み-->
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.3.10/dist/vuetify.min.css" rel="stylesheet">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+    <style>
+        .red-b {
+            border: red 1px solid;
+        }
+        .blue-b {
+            border: blue 1px solid;
+        }
+
+    </style>
+
+</head>
+<body>
+
+
+
+
+
+<!-- 仮想DOM -->
+<div id="app">
+
+    <!-- vuetifyを使用するときは、仮想DOMの中に <v-app> タグを入れることを忘れない 必須 -->
+    <v-app>
+
+
+        <!-- <v-system-bar app>ヘッダーの上 (v-system-bar)</v-system-bar> -->
+
+        <!-- v-ヘッダー  ※後ろに app をつけると、ヘッダーの高さがfixedとなり、固定される-->
+        <v-app-bar app>
+            ヘッダー （v-app-var）
+        </v-app-bar>
+
+        <!-- v-メイン -->
+        <!-- 以前はv-contentsだったが今はv-main -->
+        <v-main>
+
+            <!-- <v-container fluid> とfluidとつけることにより、レスポンシブ対応となる -->
+            <v-container fluid>
+
+                <v-row class="blue-b">
+                    <!-- md="4"  ミディアムサイズなら４つ分使う(９６０px以上の場合) -->
+                    <!-- sm="6"  スモールサイズなら6つ分使う(半分) -->
+                    <!-- my="5" で 上下マージン20px(4×5px)になる -->
+
+                    <v-col cols="12" md="4" sm="6" class="my-5 red-b">
+                        <!-- v-ボタン -->
+                        <v-btn
+                            v-on:click="isShow = !isShow"
+                            color="primary">
+                            Primary
+                        </v-btn>
+                    </v-col>
+
+                    <v-col cols="12" md="4" class="">
+                        <!-- v-カード -->
+                        <v-card
+                            v-show="isShow"
+                            class="mx-auto"
+                            max-width="344"
+                            outlined
+                        >
+                            <v-list-item three-line>
+                                <v-list-item-content>
+                                    <div class="overline mb-4">OVERLINE</div>
+                                    <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
+                                    <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
+                                </v-list-item-content>
+
+                                <v-list-item-avatar
+                                    tile
+                                    size="80"
+                                    color="grey"
+                                ></v-list-item-avatar>
+                            </v-list-item>
+
+                            <v-card-actions>
+                                <v-btn text>Button</v-btn>
+                                <v-btn text>Button</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-col>
+
+                    <v-col cols="12" md="4" class="">う</v-col>
+
+                </v-row>
+                コンテンツ （v-container）
+            </v-container>
+
+        </v-main>
+
+        <!-- v-フッター -->
+        <v-footer>
+            フッター （v-footer）
+        </v-footer>
+
+    </v-app>
+
+</div>
+
+<!-- vue.jsの読み込み -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+<!-- vuetifyの読み込み -->
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.3.10/dist/vuetify.js"></script>
+
+
+
+<script>
+    new Vue({
+        el: '#app',
+        // vuetifyもインスタンス化している
+        vuetify: new Vuetify(),
+
+        data() {
+            return {
+                isShow: false
+            }
+        }
+
+    })
+</script>
+
+
+
+
+
+</body>
+</html>

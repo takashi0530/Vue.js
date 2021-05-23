@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- vue.js読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+    <style>
+        /* マスタッシュが一瞬表示されるのを防ぐ */
+        [v-cloak] {
+            display: none;
+        }
+
+        .parent{
+            width: 400px;
+            margin: 0 auto;
+            border: 1px red solid;
+            padding: 50px;
+        }
+        .child {
+            width: 40%;
+            margin: 0 auto;
+            border: 1px blue solid;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+
+
+
+
+    <!-- ▼ 仮想DOMここから -->
+    <!-- マスタッシュが一瞬表示されるのを防ぐ v-cloak -->
+    <!-- 親 コンポーネント -->
+    <div id="app" class="parent">
+
+        <!-- 子   子で入力した情報が親に打ち上がる -->
+        <custom-input
+            v-on:child-event="parentValue = $event"
+            class="child"
+        ></custom-input>
+
+        <!-- 親 -->
+        <br>子から親側にわたってきた情報：{{ parentValue }}
+
+    </div>
+    <!-- ▲ 仮想DOMここまで ▲ -->
+
+
+
+
+
+
+
+
+
+
+    <script>
+
+        let customInput = {
+            template: `
+                <div>
+                    <input type="text" v-model="childParam">
+                </div>`,
+                data() {
+                    return {
+                        childValue: ''
+                    }
+                },
+                computed: {
+                    childParam: {
+                        get() {
+                            return this.childValue;
+                        },
+                        // setで入力した値をうけとることができる
+                        set(value) {
+                            this.childValue = value;
+                            this.$emit('child-event', value);
+
+                        }
+                    }
+                }
+        };
+
+
+
+
+        let app = new Vue({
+            el: '#app',
+
+            // ローカルコンポーネント
+            components: {
+                customInput
+            },
+
+            data() {
+                return {
+                    // 子のinputに入力するとparentValueにも値が入る   子 → 親
+                    parentValue: ''
+                }
+            },
+
+            methods: {
+                //
+            }
+
+        });
+    </script>
+
+
+</body>
+</html>

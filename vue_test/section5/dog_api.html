@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- グーグルフォント css読み込み-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+
+    <!-- マテリアルデザインアイコン mdi 5.5.55 css読み込み -->
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.5.55/css/materialdesignicons.min.css" rel="stylesheet">
+
+    <!-- vuetify バージョン2.3.10 css読み込み-->
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.3.10/dist/vuetify.min.css" rel="stylesheet">
+
+    <!-- lodash.js 読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+
+
+
+
+<!-- 仮想DOM -->
+<div id="app">
+
+    <!-- vuetifyを使用するときは、仮想DOMの中に <v-app> タグを入れることを忘れない 必須 -->
+    <v-app v-cloak>
+
+        <!-- v-ヘッダー  ※後ろに app をつけると、ヘッダーの高さがfixedとなり、固定される-->
+        <v-app-bar app>
+            ヘッダー （v-app-var）
+        </v-app-bar>
+
+        <!-- v-メイン -->
+        <v-main>
+            <!-- <v-container fluid> とfluidとつけることにより、レスポンシブ対応となる -->
+            <v-container fluid>
+                コンテンツ （v-container）
+                <v-row>
+                    <v-col
+                        v-for="(dogType, index) in dogTypes"
+                        v-bind:key="index"
+                        cols="6" md="4"
+                    >
+                        <v-btn
+                            v-on:click.prevent="fetchDogImage(index)"
+                            color="cyan"
+                            dark
+                        >
+                        {{ dogType }}
+                        </v-btn>
+                    </v-col>
+                </v-row>
+
+
+                <v-row v-show="isShow">
+                    <v-col
+                        v-for="dogImage in dogImages"
+                        v-bind:key="dogImage"
+                        cols="12" sm="6" md="4"
+                    >
+                        <v-card>
+                            <v-img
+                                v-bind:src="dogImage"
+                            ></v-img>
+                        </v-card>
+                    </v-col>
+
+
+                </v-row>
+            </v-container>
+        </v-main>
+
+        <!-- v-フッター -->
+        <v-footer>
+            フッター （v-footer）
+        </v-footer>
+
+    </v-app>
+
+</div>
+
+<!-- vue.jsの読み込み -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+
+<!-- vuetifyの読み込み -->
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.3.10/dist/vuetify.js"></script>
+
+
+
+<script>
+    new Vue({
+        el: '#app',
+        // vuetifyもインスタンス化している
+        vuetify: new Vuetify(),
+
+        data() {
+            return {
+                dogTypes:
+                [
+                    'akita',
+                    'beagle',
+                    'pekinese',
+                    'pug'
+                ],
+
+                dogUrl: '',
+                dogImages: '',
+                isShow: false
+
+            }
+
+        },
+
+        methods: {
+            async fetchDogImage(index) {
+                const that = this;
+                this.dogUrl = `https://dog.ceo/api/breed/${this.dogTypes[index]}/images`;
+                const response = await fetch(this.dogUrl, {method: 'get'})
+                .then(response => {
+                    if (response.ok) {
+                        that.isShow = true;
+                        return response.json();
+                    };
+
+                    throw new Error('error')
+                    .catch(e => console.log(e.message));
+                })
+                this.render(response);
+            },
+
+            render(response) {
+                if (response.message.length > 20) {
+                    this.dogImages = _(response.message)
+                    .shuffle().slice(0, 20).value();
+                } else {
+                    this.dogImages = _.shuffle(response.message);
+                }
+            }
+        }
+
+
+
+    })
+</script>
+
+
+
+
+
+</body>
+</html>
